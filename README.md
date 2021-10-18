@@ -21,6 +21,8 @@ This programe could simulate mouse clicks every points specified according to th
 注意：图像为 PNG 格式，请使用 pdfLaTeX 或先行转换格式。
 
 ## 用例
+比如，有输入端 A, B, C, D 和输出端 $f_{gt}$，$f_{eq}$，$f_{lt}$ （分别连接开关和 LED）。则编写以下文件：
+
 innam.txt:
 ```
 A
@@ -31,10 +33,20 @@ D
 
 outnam.txt:
 ```
-$$f_{gt}$$
-$$f_{eq}$$
-$$f_{lt}$$
+$f_{gt}$
+$f_{eq}$
+$f_{lt}$
 ```
+
+然后运行程序。首先输入保存名，如 lab1。然后回车。
+
+接下来，按提示将鼠标悬停到相应组件（开关或 LED）上，然后按回车键。
+
+全部完成后，鼠标将自动移动到开关上并点击。此时请双手离开鼠标键盘以免影响。默认每秒截一次图，点一次开关。
+
+截图将保存到文件夹 vimglab1 中，截图的引用(\includegraphics指令序列)也将自动生成到 vimglab1.tex 中，此外，真值表将生成到 ttbllab1.tex 中。
+
+生成的 tex 文件不能直接使用，请自行微调。
 
 ## 环境需求
 Windows （高分屏运行测试正常）
