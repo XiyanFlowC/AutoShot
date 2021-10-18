@@ -69,22 +69,22 @@ namespace AutoShot
             pen.WriteLine(@"\begin{tabular}{PUTS YOUR FORMAT HERE!}");
             for(int i = 0; i < inps.Length; ++i)
             {
-                pen.Write($@"\textbf{{{inputNames[i]}}} && ");
+                pen.Write($@"\textbf{{{inputNames[i]}}} & ");
             }
             for(int i = 0; i < outps.Length - 1; ++i)
             {
-                pen.Write($@"\textbf{{{outputNames[i]}}} && ");
+                pen.Write($@"\textbf{{{outputNames[i]}}} & ");
             }
-            pen.WriteLine($@"\texbf{{{outputNames[outps.Length - 1]}}} \\");
+            pen.WriteLine($@"\textbf{{{outputNames[outps.Length - 1]}}} \\");
             for (int I = 0; I < (2 << inps.Length - 1); ++I)
             {
                 for(int J = inps.Length - 1; J >= 0; --J)
                 {
-                    pen.Write($@"{(I >> J) & 1} && ");
+                    pen.Write($@"{(I >> J) & 1} & ");
                 }
                 for(int J = 0; J < (outps.Length - 1); ++J)
                 {
-                    pen.Write($@"{(shot.Results[I, J] ? "1" : "0")} && ");
+                    pen.Write($@"{(shot.Results[I, J] ? "1" : "0")} & ");
                 }
                 pen.WriteLine($@"{(shot.Results[I, outps.Length - 1] ? "1" : "0")} \\");
             }
