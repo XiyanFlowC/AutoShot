@@ -100,7 +100,7 @@ namespace AutoShot
             {
                 //pen.WriteLine($@"\subsubsection{{Result of {i}}}");
                 pen.WriteLine($@"\includegraphics{{vimg{imgnm}/{i}.png}}");
-                shot.Screenshots[i].Save($"vimg/{i}.png", System.Drawing.Imaging.ImageFormat.Png);
+                shot.Screenshots[i].Save($"vimg{imgnm}/{i}.png", System.Drawing.Imaging.ImageFormat.Png);
             }
             pen.Close();
         }
