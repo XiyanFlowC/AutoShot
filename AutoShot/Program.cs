@@ -16,18 +16,19 @@ namespace AutoShot
             string[] inputNames = File.ReadAllLines("innam.txt"); // { "A", "B", "C", "D", "E", "F", "G", "H" };
             string[] outputNames = File.ReadAllLines("outnam.txt");// { "X", "Y", "Z", "M", "N" };
 
-            Console.WriteLine("需要点击的输入开关有几个？");
+            //Console.WriteLine("需要点击的输入开关有几个？");
             int innum = inputNames.Length;//int.Parse(Console.ReadLine());
             Point[] inps = new Point[innum];
-            for(int i = inps.Length - 1; i >= 0; --i)
+            for (int i = inps.Length - 1; i >= 0; --i)
+            //for(int i = 0; i < inps.Length; ++i)
             {
-                Console.WriteLine($"准备好录入 {inputNames[i]} 时按回车");
+                Console.WriteLine($"准备好录入 {inputNames[inps.Length - 1 - i]} 时按回车");
                 Console.ReadLine();
                 inps[i] = Control.MousePosition;
-                Console.WriteLine($"点 {inputNames[i]} 已录入。");
+                Console.WriteLine($"点 {inputNames[inps.Length - 1 - i]} 已录入。");
             }
 
-            Console.WriteLine("需要确认的输出灯有几个？");
+            //Console.WriteLine("需要确认的输出灯有几个？");
             int outnum = outputNames.Length;//int.Parse(Console.ReadLine());
             Point[] outps = new Point[outnum];
             for(int i = 0; i < outnum; ++i)
