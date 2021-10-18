@@ -9,6 +9,8 @@ This programe could simulate mouse clicks every points specified according to th
 
 此程序，可以根据格雷码规律模拟鼠标点击各点，然后在指定位置截图。同时，如果给出 LED 灯的位置，还能自动判断灯的颜色，生成 TeX 形式的真值表。
 
+已经添加了对 Markdown 语法的输出支持。
+
 ## Usage 用法
 首先在程序根目录创建文件 innam.txt 及 outnam.txt，其中分别为输入端和输出端的名称。
 
@@ -19,6 +21,8 @@ This programe could simulate mouse clicks every points specified according to th
 截图将保存到 vimg 文件夹中。并生成用于嵌入的 variimgs.tex 文件便于将图像嵌入 TeX 文档。
 
 注意：图像为 PNG 格式，请使用 pdfLaTeX 或先行转换格式。
+
+如果需要以 Markdown 语法输出，请在程序根目录处新建文件，文件名为 usemd，注意不能有扩展名。
 
 ## 用例
 比如，有输入端 A, B, C, D 和输出端 $f_{gt}$，$f_{eq}$，$f_{lt}$ （分别连接开关和 LED）。则编写以下文件：
