@@ -13,6 +13,8 @@ namespace AutoShot
         static void Main(string[] args)
         {
             Console.WriteLine("文件命名为……");
+            bool useMarkdown = false;
+            if (File.Exists("usemd")) useMarkdown = true;
             string imgnm = Console.ReadLine();
             if (!Directory.Exists("vimg" + imgnm)) Directory.CreateDirectory("vimg" + imgnm);
             string[] inputNames = File.ReadAllLines("innam.txt"); // { "A", "B", "C", "D", "E", "F", "G", "H" };
@@ -64,45 +66,92 @@ namespace AutoShot
 
             shot.Shot();
 
-            StreamWriter pen = new StreamWriter(File.OpenWrite($"ttbl{imgnm}.tex"));
-            pen.WriteLine(@"\begin{table}[h]");
-            pen.WriteLine(@"\begin{center}");
-            pen.WriteLine(@"\caption{Truth table}");
-            pen.WriteLine(@"\begin{tabular}{PUTS YOUR FORMAT HERE!}");
-            for(int i = 0; i < inps.Length; ++i)
+            if (useMarkdown)
             {
-                pen.Write($@"\textbf{{{inputNames[i]}}} & ");
-            }
-            for(int i = 0; i < outps.Length - 1; ++i)
-            {
-                pen.Write($@"\textbf{{{outputNames[i]}}} & ");
-            }
-            pen.WriteLine($@"\textbf{{{outputNames[outps.Length - 1]}}} \\");
-            for (int I = 0; I < (2 << inps.Length - 1); ++I)
-            {
-                for(int J = inps.Length - 1; J >= 0; --J)
+                Console.WriteLine("将以 MarkDown 形式输出结果。");
+                StreamWriter pen = new StreamWriter(File.Open($"ttbl{imgnm}.md", FileMode.Create));
+                pen.Write("| ");
+                foreach(var item in inputNames)
                 {
-                    pen.Write($@"{(I >> J) & 1} & ");
+                    pen.Write($"{item} | ");
                 }
-                for(int J = 0; J < (outps.Length - 1); ++J)
+                foreach(var item in outputNames)
                 {
-                    pen.Write($@"{(shot.Results[I, J] ? "1" : "0")} & ");
+                    pen.Write($"{item} | ");
                 }
-                pen.WriteLine($@"{(shot.Results[I, outps.Length - 1] ? "1" : "0")} \\");
-            }
-            pen.WriteLine(@"\end{tabular}");
-            pen.WriteLine(@"\end{center}");
-            pen.WriteLine(@"\end{table}");
-            pen.Close();
+                pen.WriteLine();
+                for(int i = 0; i < inputNames.Length + outputNames.Length; ++i)
+                {
+                    pen.Write("| --- ");
+                }
+                pen.WriteLine("|");
+                for (int I = 0; I < (2 << inps.Length - 1); ++I)
+                {
+                    pen.Write("| ");
+                    for (int J = inps.Length - 1; J >= 0; --J)
+                    {
+                        pen.Write($@"{(I >> J) & 1} | ");
+                    }
+                    for (int J = 0; J < (outps.Length - 1); ++J)
+                    {
+                        pen.Write($@"{(shot.Results[I, J] ? "1" : "0")} | ");
+                    }
+                    pen.WriteLine($@"{(shot.Results[I, outps.Length - 1] ? "1" : "0")} |");
+                }
+                pen.Close();
 
-            pen = new StreamWriter(File.OpenWrite($"vimg{imgnm}.tex"));
-            for(int i = 0; i < (2 << inps.Length - 1); ++i)
-            {
-                //pen.WriteLine($@"\subsubsection{{Result of {i}}}");
-                pen.WriteLine($@"\includegraphics{{vimg{imgnm}/{i}.png}}");
-                shot.Screenshots[i].Save($"vimg{imgnm}/{i}.png", System.Drawing.Imaging.ImageFormat.Png);
+                pen = new StreamWriter(File.OpenWrite($"vimg{imgnm}.md"));
+                for (int i = 0; i < (2 << inps.Length - 1); ++i)
+                {
+                    //pen.WriteLine($@"\subsubsection{{Result of {i}}}");
+                    pen.WriteLine($@"![{i}](vimg{imgnm}/{i}.png)");
+                    shot.Screenshots[i].Save($"vimg{imgnm}/{i}.png", System.Drawing.Imaging.ImageFormat.Png);
+                }
+                pen.Close();
             }
-            pen.Close();
+            else
+            {
+                Console.WriteLine("将以 TeX 形式输出结果。");
+                StreamWriter pen = new StreamWriter(File.Open($"ttbl{imgnm}.tex", FileMode.Create));
+                pen.WriteLine(@"\begin{table}[h]");
+                pen.WriteLine(@"\begin{center}");
+                pen.WriteLine(@"\caption{Truth table}");
+                pen.WriteLine(@"\begin{tabular}{PUTS YOUR FORMAT HERE!}");
+                for (int i = 0; i < inps.Length; ++i)
+                {
+                    pen.Write($@"\textbf{{{inputNames[i]}}} & ");
+                }
+                for (int i = 0; i < outps.Length - 1; ++i)
+                {
+                    pen.Write($@"\textbf{{{outputNames[i]}}} & ");
+                }
+                pen.WriteLine($@"\textbf{{{outputNames[outps.Length - 1]}}} \\");
+                for (int I = 0; I < (2 << inps.Length - 1); ++I)
+                {
+                    for (int J = inps.Length - 1; J >= 0; --J)
+                    {
+                        pen.Write($@"{(I >> J) & 1} & ");
+                    }
+                    for (int J = 0; J < (outps.Length - 1); ++J)
+                    {
+                        pen.Write($@"{(shot.Results[I, J] ? "1" : "0")} & ");
+                    }
+                    pen.WriteLine($@"{(shot.Results[I, outps.Length - 1] ? "1" : "0")} \\");
+                }
+                pen.WriteLine(@"\end{tabular}");
+                pen.WriteLine(@"\end{center}");
+                pen.WriteLine(@"\end{table}");
+                pen.Close();
+
+                pen = new StreamWriter(File.OpenWrite($"vimg{imgnm}.tex"));
+                for (int i = 0; i < (2 << inps.Length - 1); ++i)
+                {
+                    //pen.WriteLine($@"\subsubsection{{Result of {i}}}");
+                    pen.WriteLine($@"\includegraphics{{vimg{imgnm}/{i}.png}}");
+                    shot.Screenshots[i].Save($"vimg{imgnm}/{i}.png", System.Drawing.Imaging.ImageFormat.Png);
+                }
+                pen.Close();
+            }
         }
     }
 }
