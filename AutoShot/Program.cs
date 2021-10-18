@@ -12,7 +12,9 @@ namespace AutoShot
     {
         static void Main(string[] args)
         {
-            if (!Directory.Exists("vimg")) Directory.CreateDirectory("vimg");
+            Console.WriteLine("文件命名为……");
+            string imgnm = Console.ReadLine();
+            if (!Directory.Exists("vimg" + imgnm)) Directory.CreateDirectory("vimg" + imgnm);
             string[] inputNames = File.ReadAllLines("innam.txt"); // { "A", "B", "C", "D", "E", "F", "G", "H" };
             string[] outputNames = File.ReadAllLines("outnam.txt");// { "X", "Y", "Z", "M", "N" };
 
@@ -62,7 +64,7 @@ namespace AutoShot
 
             shot.Shot();
 
-            StreamWriter pen = new StreamWriter(File.OpenWrite("truthtbl.tex"));
+            StreamWriter pen = new StreamWriter(File.OpenWrite($"ttbl{imgnm}.tex"));
             pen.WriteLine(@"\begin{table}[h]");
             pen.WriteLine(@"\begin{center}");
             pen.WriteLine(@"\caption{Truth table}");
@@ -93,11 +95,11 @@ namespace AutoShot
             pen.WriteLine(@"\end{table}");
             pen.Close();
 
-            pen = new StreamWriter(File.OpenWrite("variimgs.tex"));
+            pen = new StreamWriter(File.OpenWrite($"vimg{imgnm}.tex"));
             for(int i = 0; i < (2 << inps.Length - 1); ++i)
             {
                 //pen.WriteLine($@"\subsubsection{{Result of {i}}}");
-                pen.WriteLine($@"\includegraphics{{vimg/{i}.png}}");
+                pen.WriteLine($@"\includegraphics{{vimg{imgnm}/{i}.png}}");
                 shot.Screenshots[i].Save($"vimg/{i}.png", System.Drawing.Imaging.ImageFormat.Png);
             }
             pen.Close();
